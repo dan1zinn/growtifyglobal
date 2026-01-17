@@ -1,0 +1,2813 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="blue" data-lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Painel Privado - Mock Layout</title>
+
+  <style>
+    /* =========================================================
+      THEMES (Blue default + Dark)
+      - Mantém sua estrutura e troca apenas tokens CSS
+    ========================================================= */
+    :root{
+      --radius:14px;
+      --radius2:10px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    /* THEME: BLUE (padrão azul) */
+    html[data-theme="blue"]{
+      --bg:#f6f8fe;
+      --panel: rgba(255,255,255,.72);
+      --panel2: rgba(255,255,255,.90);
+      --border: rgba(31, 72, 138, .18);
+      --text:#0b1220;
+      --muted:#5a6b86;
+
+      --accent:#3b82f6;     /* azul */
+      --accent2:#22c55e;    /* verde */
+      --warn:#f59e0b;
+      --danger:#ef4444;
+
+      --chip: rgba(59,130,246,.10);
+      --chipBorder: rgba(59,130,246,.18);
+
+      --bgGrad1: rgba(59,130,246,.12);
+      --bgGrad2: rgba(34,197,94,.08);
+
+      --sidebarGradTop: rgba(255,255,255,.92);
+      --sidebarGradBot: rgba(245,247,255,.92);
+
+      --tableHeadBg: rgba(245,247,255,.95);
+      --inputBg: rgba(255,255,255,.92);
+      --hoverRow: rgba(59,130,246,.06);
+
+      --focusRing: rgba(59,130,246,.18);
+      --focusBorder: rgba(59,130,246,.55);
+    }
+
+    /* THEME: DARK (escuro) */
+    html[data-theme="dark"]{
+      --bg:#0b0f17;
+      --panel: rgba(15,22,36,.72);
+      --panel2: rgba(12,19,32,.90);
+      --border:#1b2a3d;
+      --text:#d7e2f0;
+      --muted:#97a8bf;
+
+      --accent:#3b82f6;     /* mantém azul pra identidade */
+      --accent2:#22c55e;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+
+      --chip: rgba(17,28,47,.7);
+      --chipBorder: rgba(27,42,61,.7);
+
+      --bgGrad1: rgba(59,130,246,.14);
+      --bgGrad2: rgba(34,197,94,.07);
+
+      --sidebarGradTop: rgba(15,22,36,.98);
+      --sidebarGradBot: rgba(12,19,32,.98);
+
+      --tableHeadBg: rgba(12,19,32,.85);
+      --inputBg: rgba(12,19,32,.9);
+      --hoverRow: rgba(59,130,246,.07);
+
+      --focusRing: rgba(59,130,246,.15);
+      --focusBorder: rgba(59,130,246,.65);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, var(--bgGrad1), transparent 55%),
+        radial-gradient(1200px 800px at 90% 20%, var(--bgGrad2), transparent 50%),
+        var(--bg);
+    }
+
+    /* Layout */
+    .app{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      min-height:100vh;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:sticky; top:0;
+      height:100vh;
+      background: linear-gradient(180deg, var(--sidebarGradTop), var(--sidebarGradBot));
+      border-right:1px solid var(--border);
+      padding:18px 14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      padding:10px 10px 16px;
+      border-bottom:1px solid rgba(0,0,0,.06);
+      margin-bottom:14px;
+    }
+    html[data-theme="dark"] .brand{
+      border-bottom:1px solid rgba(27,42,61,.7);
+    }
+
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.25), rgba(34,197,94,.2));
+      box-shadow: 0 8px 20px rgba(59,130,246,.18);
+    }
+    .logo svg{
+      width:32px;
+      height:32px;
+    }
+    .brand h1{
+      font-size:16px;
+      margin:0;
+      letter-spacing:.3px;
+      font-weight:700;
+    }
+    .nav{
+      display:flex; flex-direction:column; gap:8px;
+      padding:6px;
+    }
+    .nav-section{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      padding:8px;
+      border-radius:12px;
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+      border:1px solid var(--border);
+    }
+    .nav-title{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      color: var(--muted);
+      margin:4px 6px 0;
+    }
+    .nav a{
+      text-decoration:none;
+      color:var(--text);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background: transparent;
+      transition: .15s ease;
+      font-size:13px;
+    }
+    .nav a:hover{
+      background: rgba(59,130,246,.08);
+      border-color: rgba(59,130,246,.18);
+    }
+    .nav a.active{
+      background: rgba(59,130,246,.12);
+      border-color: rgba(59,130,246,.25);
+      box-shadow: 0 10px 20px rgba(0,0,0,.10);
+    }
+    .pill{
+      font-size:11px;
+      padding:3px 8px;
+      border-radius:999px;
+      background: rgba(34,197,94,.12);
+      border:1px solid rgba(34,197,94,.2);
+      color: color-mix(in srgb, var(--text) 20%, #22c55e 80%);
+    }
+    .sidebar .footer{
+      position:absolute; bottom:14px; left:14px; right:14px;
+      padding:12px;
+      border-radius:14px;
+      background: color-mix(in srgb, var(--panel2) 65%, transparent 35%);
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .kbd{
+      font-family: var(--mono);
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:8px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      color: #cfe0ff;
+    }
+    html[data-theme="blue"] .kbd{
+      background: rgba(11,18,32,.06);
+      border:1px solid rgba(11,18,32,.08);
+      color: var(--text);
+    }
+
+    /* Main */
+    .main{
+      padding:18px 18px 32px;
+      max-width: 1250px;
+      width:100%;
+      margin:0 auto;
+    }
+
+    /* Topbar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .topbar h2{
+      margin:0;
+      font-size:14px;
+      font-weight:650;
+      letter-spacing:.3px;
+    }
+    .topbar .sub{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .rightbar{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .mini-controls{
+      display:flex; gap:8px; align-items:center;
+      padding:8px 10px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+      border:1px solid var(--border);
+    }
+    .toggle{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px;
+      color: var(--muted);
+      user-select:none;
+      cursor:pointer;
+    }
+    .switch{
+      width:44px; height:24px;
+      border-radius:999px;
+      background: rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.28);
+      position:relative;
+      flex:0 0 auto;
+    }
+    .knob{
+      width:18px; height:18px;
+      border-radius:999px;
+      position:absolute;
+      top:50%; transform: translateY(-50%);
+      left:3px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 8px 16px rgba(0,0,0,.18);
+      transition:.18s ease;
+    }
+    html[data-theme="dark"] .switch{ background: rgba(59,130,246,.14); }
+    html[data-theme="dark"] .knob{ background: rgba(240,246,255,.92); }
+    .switch.on .knob{ left: calc(100% - 21px); }
+
+    .segmented{
+      display:flex;
+      border-radius: 12px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+    }
+    .segmented button{
+      border:0;
+      background: transparent;
+      color: var(--muted);
+      font-size:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      transition:.12s ease;
+      border-right:1px solid var(--border);
+    }
+    .segmented button:last-child{ border-right:0; }
+    .segmented button.active{
+      color: var(--text);
+      background: rgba(59,130,246,.14);
+    }
+
+    .userbox{
+      display:flex; align-items:center; gap:10px;
+      padding:8px 10px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+      border:1px solid var(--border);
+    }
+    .avatar{
+      width:28px; height:28px; border-radius:10px;
+      background: rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.28);
+    }
+    .userbox strong{font-size:12px}
+    .userbox span{display:block; font-size:11px; color:var(--muted); margin-top:2px}
+
+    /* Cards */
+    .card{
+      margin-top:14px;
+      padding:14px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Generic UI */
+    .btn{
+      border:1px solid rgba(59,130,246,.35);
+      background: rgba(59,130,246,.14);
+      color: color-mix(in srgb, var(--text) 35%, #3b82f6 65%);
+      padding:12px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:650;
+      font-size:13px;
+      transition:.15s ease;
+    }
+    html[data-theme="blue"] .btn{ color: #0b1220; }
+    .btn:hover{ background: rgba(59,130,246,.22); transform: translateY(-1px); }
+    .btn.ghost{
+      background: transparent;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn.ghost:hover{
+      background: rgba(59,130,246,.08);
+      border-color: rgba(59,130,246,.22);
+    }
+    .btn.success{
+      border-color: rgba(34,197,94,.25);
+      background: rgba(34,197,94,.12);
+      color: color-mix(in srgb, var(--text) 25%, #22c55e 75%);
+    }
+    .btn.success:hover{ background: rgba(34,197,94,.18); }
+    .btn.small{
+      padding:8px 10px;
+      font-size:12px;
+    }
+    .btn.warn{
+      border-color: rgba(245,158,11,.3);
+      background: rgba(245,158,11,.12);
+      color: color-mix(in srgb, var(--text) 20%, #f59e0b 80%);
+    }
+
+    .input, .select, .textarea{
+      width:100%;
+      border-radius: 12px;
+      border:1px solid var(--border);
+      background: var(--inputBg);
+      color: var(--text);
+      padding:12px 12px;
+      outline:none;
+      transition: .15s ease;
+      font-size:13px;
+    }
+    .textarea{ min-height: 110px; resize: vertical; }
+    .input:focus, .select:focus, .textarea:focus{
+      border-color: var(--focusBorder);
+      box-shadow: 0 0 0 4px var(--focusRing);
+    }
+    .muted{color:var(--muted)}
+    .small{ font-size:12px; }
+    .right{ text-align:right; }
+    .nowrap{ white-space:nowrap; }
+
+    .chip{
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: var(--chip);
+      border:1px solid var(--chipBorder);
+      color: color-mix(in srgb, var(--text) 70%, white 30%);
+    }
+    html[data-theme="blue"] .chip{
+      color: var(--text);
+      background: rgba(11,18,32,.04);
+      border-color: rgba(11,18,32,.08);
+    }
+    .chip.accent{
+      border-color: rgba(59,130,246,.28);
+      background: rgba(59,130,246,.10);
+    }
+
+    /* Page shells */
+    .page{ display:none; }
+    .page.active{ display:block; }
+
+    /* Services table (mantido e adaptado pro tema) */
+    .controls{
+      display:grid;
+      grid-template-columns: 1.3fr 0.6fr 0.6fr 0.6fr;
+      gap:10px;
+      align-items:center;
+    }
+    .meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:10px;
+      color: var(--muted);
+      font-size:12px;
+    }
+    .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+
+    .tablewrap{
+      margin-top:14px;
+      border-radius: var(--radius);
+      overflow:hidden;
+      border:1px solid var(--border);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:13px;
+    }
+    thead th{
+      text-align:left;
+      font-size:11px;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      color: var(--muted);
+      padding:12px 14px;
+      background: var(--tableHeadBg);
+      border-bottom:1px solid var(--border);
+      position:sticky; top:0; z-index:1;
+    }
+    tbody td{
+      padding:12px 14px;
+      border-bottom:1px solid color-mix(in srgb, var(--border) 75%, transparent 25%);
+      vertical-align:middle;
+    }
+    tbody tr:hover{ background: var(--hoverRow); }
+    .idbadge{
+      font-family: var(--mono);
+      font-size:12px;
+      padding:5px 9px;
+      border-radius:999px;
+      background: rgba(59,130,246,.12);
+      border:1px solid rgba(59,130,246,.25);
+      color: color-mix(in srgb, var(--text) 40%, #3b82f6 60%);
+      display:inline-block;
+      min-width:72px;
+      text-align:center;
+    }
+    html[data-theme="blue"] .idbadge{ color: #0b1220; }
+    .svc{ display:flex; flex-direction:column; gap:6px; }
+    .svc .name{ font-weight:700; line-height:1.2; }
+    .svc .desc{ color:var(--muted); font-size:12px; line-height:1.25; }
+
+    .badges{ display:flex; gap:6px; flex-wrap:wrap; }
+    .badge{
+      font-size:10px;
+      padding:4px 8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.09);
+      color: color-mix(in srgb, var(--text) 70%, white 30%);
+      font-family: var(--mono);
+    }
+    html[data-theme="blue"] .badge{
+      background: rgba(11,18,32,.05);
+      border:1px solid rgba(11,18,32,.08);
+      color: var(--text);
+    }
+    .badge.good{
+      background: rgba(34,197,94,.10);
+      border-color: rgba(34,197,94,.22);
+      color: color-mix(in srgb, var(--text) 40%, #22c55e 60%);
+    }
+    .badge.br{
+      background: rgba(59,130,246,.10);
+      border-color: rgba(59,130,246,.22);
+      color: color-mix(in srgb, var(--text) 40%, #3b82f6 60%);
+    }
+    .badge.warn{
+      background: rgba(245,158,11,.10);
+      border-color: rgba(245,158,11,.25);
+      color: color-mix(in srgb, var(--text) 40%, #f59e0b 60%);
+    }
+    .rate{ font-family: var(--mono); color: var(--text); }
+    .service-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .service-details{
+      margin-top:14px;
+      padding:16px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .service-details h4{
+      margin:0 0 8px 0;
+      font-size:13px;
+      letter-spacing:.2px;
+    }
+    .service-detail-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:12px;
+    }
+    .service-detail-item{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+    }
+    .service-detail-item strong{
+      display:block;
+      margin-top:4px;
+      font-size:13px;
+    }
+    .service-details .desc{
+      margin:0 0 10px 0;
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+    .ai-section{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px;
+      border-radius: var(--radius);
+      border:1px solid var(--border);
+      background: linear-gradient(135deg, rgba(59,130,246,.12), rgba(139,92,246,.12));
+      box-shadow: var(--shadow);
+      margin-top:14px;
+      cursor:pointer;
+      transition: .15s ease;
+    }
+    .ai-section:hover{
+      transform: translateY(-1px);
+    }
+    .ai-section strong{
+      font-size:13px;
+      letter-spacing:.2px;
+    }
+    .coming-soon{
+      display:none;
+      margin-top:10px;
+      padding:18px;
+      border-radius: var(--radius);
+      border:1px dashed var(--border);
+      text-align:center;
+      font-size:18px;
+      font-weight:700;
+      letter-spacing:2px;
+      color: var(--muted);
+      background: color-mix(in srgb, var(--panel2) 55%, transparent 45%);
+    }
+    .order-table td, .order-table th{
+      text-align:left;
+    }
+    .order-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .status-chip{
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+    }
+    .status-chip.pending{ color: #f59e0b; }
+    .status-chip.processing{ color: #3b82f6; }
+    .status-chip.progress{ color: #22c55e; }
+    .status-chip.complete{ color: #16a34a; }
+    .status-chip.partial{ color: #f97316; }
+    .status-chip.cancelled{ color: #ef4444; }
+
+    /* Create Order */
+    .order-shell{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    .sidecard{
+      padding:14px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .catbtn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      cursor:pointer;
+      transition:.15s ease;
+      text-align:left;
+      font-size:13px;
+    }
+    .catbtn:hover{
+      background: rgba(59,130,246,.08);
+      border-color: rgba(59,130,246,.18);
+    }
+    .catbtn.active{
+      background: rgba(59,130,246,.12);
+      border-color: rgba(59,130,246,.25);
+      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+    }
+    .catmeta{
+      font-size:11px;
+      color: var(--muted);
+      margin-top:6px;
+    }
+    .svcgrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .svcCard{
+      padding:14px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .svcCard h3{
+      margin:0 0 6px 0;
+      font-size:13px;
+      letter-spacing:.2px;
+    }
+    .svcCard p{
+      margin:0 0 10px 0;
+      font-size:12px;
+      color: var(--muted);
+      line-height:1.3;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .row.one{ grid-template-columns: 1fr; }
+    .hint{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px dashed color-mix(in srgb, var(--border) 70%, transparent 30%);
+      color: var(--muted);
+      font-size:12px;
+      background: color-mix(in srgb, var(--panel2) 55%, transparent 45%);
+    }
+
+    /* Simple panels */
+    .panelTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    .panelTitle h3{
+      margin:0;
+      font-size:13px;
+      letter-spacing:.2px;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .ticket-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .ticket-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+    }
+    .ticket-meta{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .ticket-badge{
+      width:30px;
+      height:30px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      background: rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.28);
+    }
+    .account-header{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    .account-pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: color-mix(in srgb, var(--panel2) 70%, transparent 30%);
+    }
+    .account-pill .icon{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      background: rgba(59,130,246,.18);
+      border:1px solid rgba(59,130,246,.28);
+    }
+    .section-divider{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px){
+      .order-shell{ grid-template-columns: 1fr; }
+      .svcgrid{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 980px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{ position:relative; height:auto; }
+      .sidebar .footer{ position:relative; left:auto; right:auto; bottom:auto; margin-top:12px; }
+      .controls{ grid-template-columns: 1fr 1fr; }
+      .split{ grid-template-columns: 1fr; }
+      .account-header{ grid-template-columns: 1fr; }
+      .service-detail-grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="30" stroke="url(#ggStroke)" stroke-width="4" />
+            <path d="M20 34c0-8.8 7.2-16 16-16h8" stroke="url(#ggStroke)" stroke-width="6" stroke-linecap="round"/>
+            <path d="M44 18v20H24" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="ggStroke" x1="8" y1="8" x2="56" y2="56">
+                <stop offset="0" stop-color="#22c55e"/>
+                <stop offset="1" stop-color="#3b82f6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1 data-i="brand_title">GrowtifyGlobal</h1>
+        </div>
+      </div>
+
+      <nav class="nav" id="nav">
+        <div class="nav-title">Quick Links</div>
+        <div class="nav-section">
+          <a class="active" href="#services" data-route="services">
+            <span data-i="nav_services">Serviços</span><span class="pill">Hotkeys</span>
+          </a>
+          <a href="#services" data-route="services" data-anchor="ai">
+            <span>AI Recommended</span><span class="pill">AI</span>
+          </a>
+          <a href="#create" data-route="create">
+            <span data-i="nav_create">Criar pedido</span><span class="pill">Order</span>
+          </a>
+          <a href="#orders" data-route="orders">
+            <span data-i="nav_orders">Orders</span><span class="pill">IDs</span>
+          </a>
+          <a href="#mass" data-route="mass">
+            <span data-i="nav_mass">Mass order</span><span class="pill">Bulk</span>
+          </a>
+        </div>
+
+        <div class="nav-title">Payments & Payouts</div>
+        <div class="nav-section">
+          <a href="#addfunds" data-route="addfunds">
+            <span data-i="nav_addfunds">Add funds</span><span class="pill">PIX</span>
+          </a>
+          <a href="#affiliates" data-route="affiliates">
+            <span data-i="nav_affiliates">Affiliates</span><span class="pill">%</span>
+          </a>
+        </div>
+
+        <div class="nav-title">Your Requests</div>
+        <div class="nav-section">
+          <a href="#tickets" data-route="tickets">
+            <span data-i="nav_tickets">Tickets</span><span class="pill">Support</span>
+          </a>
+          <a href="#faq" data-route="faq">
+            <span data-i="nav_faq">FAQ</span><span class="pill">Rules</span>
+          </a>
+          <a href="#account" data-route="account">
+            <span data-i="nav_account">Conta</span><span class="pill">User</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="footer">
+        <span data-i="tip">Dica</span>:
+        <span class="kbd">Ctrl</span> + <span class="kbd">K</span>
+        <span data-i="tip2">abre busca</span>.<br/>
+        <span data-i="tip3">Design minimalista • foco em operador.</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">Serviços</h2>
+          <div class="sub" id="pageSub">Lista compacta • busca rápida • tags • tabela densa</div>
+        </div>
+
+        <div class="rightbar">
+          <div class="mini-controls">
+            <div class="toggle" id="themeToggle" title="Tema">
+              <div class="switch" id="themeSwitch"><div class="knob"></div></div>
+              <span id="themeLabel">Dark</span>
+            </div>
+
+            <div class="segmented" aria-label="Idioma">
+              <button id="langPT" type="button">PT</button>
+              <button id="langEN" type="button">EN</button>
+            </div>
+          </div>
+
+          <div class="userbox">
+            <div class="avatar"></div>
+            <div>
+              <strong>dan1zinn</strong>
+              <span data-i="user_role">admin • acesso privado</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- =========================
+          PAGE: SERVICES
+      ========================== -->
+      <section class="page active" id="page-services" data-page="services">
+        <section class="card">
+          <div class="controls">
+            <input id="q" class="input" placeholder="Buscar (ex: tiktok, br, premium, retention, members, likes)..." />
+            <select id="cat" class="select">
+              <option value="" data-i="cat_all">Categoria (todas)</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="twitter">Twitter/X</option>
+              <option value="telegram">Telegram</option>
+              <option value="facebook">Facebook</option>
+              <option value="kwai">Kwai</option>
+              <option value="youtube">YouTube</option>
+              <option value="spotify">Spotify</option>
+              <option value="twitch">Twitch</option>
+              <option value="discord">Discord</option>
+              <option value="kick">Kick</option>
+            </select>
+            <select id="tag" class="select">
+              <option value="" data-i="tag_all">Tag (todas)</option>
+              <option value="br">BR</option>
+              <option value="world">WORLD</option>
+              <option value="premium">PREMIUM</option>
+              <option value="online">ONLINE</option>
+              <option value="offline">OFFLINE</option>
+              <option value="retention">RETENTION</option>
+            </select>
+            <button id="clear" class="btn" type="button" data-i="btn_clear">Limpar</button>
+          </div>
+
+          <div class="meta">
+            <div class="chips">
+              <div class="chip accent"><strong data-i="tip_short">Tip:</strong> <span data-i="tip_ctrlk">Ctrl+K foca a busca</span></div>
+              <div class="chip"><strong data-i="showing">Mostrando:</strong> <span id="count">0</span> <span data-i="services">serviços</span></div>
+            </div>
+            <div class="muted small" data-i="catalog_note">Catálogo gerado automaticamente (mock)</div>
+          </div>
+        </section>
+
+        <section class="ai-section" id="aiSection">
+          <div>
+            <strong>AI RECOMMENDED SERVICES</strong>
+            <div class="muted small">Sugestões inteligentes para conversão e retenção.</div>
+          </div>
+          <button class="btn small" type="button">Ver recomendações</button>
+        </section>
+        <div class="coming-soon" id="aiComingSoon">COMING SOON</div>
+
+        <section class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:110px;">ID</th>
+                <th data-i="th_service">Serviço</th>
+                <th class="nowrap" style="width:150px;" data-i="th_minmax">Min / Max</th>
+                <th class="right nowrap" style="width:170px;" data-i="th_rate">Rate</th>
+                <th class="right nowrap" style="width:130px;" data-i="th_status">Status</th>
+                <th class="right nowrap" style="width:200px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </section>
+
+        <section class="service-details" id="serviceDetails" style="display:none;">
+          <h4>Detalhes do serviço</h4>
+          <p class="desc" id="serviceDetailsDesc"></p>
+          <div class="badges" id="serviceDetailsBadges"></div>
+          <div class="service-detail-grid">
+            <div class="service-detail-item">
+              <span class="muted small">ID</span>
+              <strong id="serviceDetailsId">—</strong>
+            </div>
+            <div class="service-detail-item">
+              <span class="muted small">Min / Max</span>
+              <strong id="serviceDetailsMinMax">—</strong>
+            </div>
+            <div class="service-detail-item">
+              <span class="muted small">Rate</span>
+              <strong id="serviceDetailsRate">—</strong>
+            </div>
+            <div class="service-detail-item">
+              <span class="muted small">Status</span>
+              <strong id="serviceDetailsStatus">—</strong>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: CREATE ORDER
+      ========================== -->
+      <section class="page" id="page-create" data-page="create">
+        <section class="card">
+          <div class="order-shell">
+            <aside class="sidecard">
+              <div class="panelTitle">
+                <h3 data-i="co_categories">Categorias</h3>
+                <span class="chip" id="coCount">0</span>
+              </div>
+
+              <div id="coCats" style="display:flex;flex-direction:column;gap:8px;"></div>
+
+              <div class="hint" style="margin-top:12px;">
+                <strong data-i="co_hint_title">Dica</strong>:
+                <span data-i="co_hint_text">Escolha uma categoria e selecione o serviço para preencher o formulário automaticamente.</span>
+              </div>
+            </aside>
+
+            <div>
+              <div class="svcgrid" id="coGrid"></div>
+
+              <section class="card" style="margin-top:14px;">
+                <div class="panelTitle">
+                  <h3 data-i="co_form_title">Criar pedido</h3>
+                  <span class="chip" id="coSelected">—</span>
+                </div>
+
+                <div class="split">
+                  <div>
+                    <div class="row">
+                      <div>
+                        <label class="small muted" data-i="co_label_service">Serviço</label>
+                        <select class="select" id="coService"></select>
+                      </div>
+                      <div>
+                        <label class="small muted" data-i="co_label_quantity">Quantidade</label>
+                        <input class="input" id="coQty" type="number" min="1" value="100" />
+                      </div>
+                    </div>
+
+                    <div class="row one">
+                      <div>
+                        <label class="small muted" data-i="co_label_link">Link / Username</label>
+                        <input class="input" id="coLink" placeholder="https://..." />
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div>
+                        <label class="small muted" data-i="co_label_drip">Drip-feed</label>
+                        <select class="select" id="coDrip">
+                          <option value="off" data-i="co_drip_off">Desativado</option>
+                          <option value="on" data-i="co_drip_on">Ativado</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label class="small muted" data-i="co_label_speed">Velocidade</label>
+                        <select class="select" id="coSpeed">
+                          <option value="auto" data-i="co_speed_auto">Auto</option>
+                          <option value="fast" data-i="co_speed_fast">Rápido</option>
+                          <option value="safe" data-i="co_speed_safe">Seguro</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="row one">
+                      <div>
+                        <label class="small muted" data-i="co_label_notes">Observações</label>
+                        <textarea class="textarea" id="coNotes" placeholder="Opcional..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="hint">
+                      <strong>Resumo do serviço</strong>
+                      <div class="muted small" style="margin-top:8px;">
+                        Confira qualidade, velocidade e garantias antes de enviar.
+                      </div>
+                      <div class="section-divider"></div>
+                      <div class="badges" id="coSummaryBadges"></div>
+                      <div class="muted small" id="coSummaryText" style="margin-top:10px;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                  <button class="btn ghost" type="button" id="coReset" data-i="co_reset">Reset</button>
+                  <button class="btn success" type="button" id="coSubmit" data-i="co_submit">Criar pedido</button>
+                </div>
+
+                <div class="hint" id="coResult" style="display:none;margin-top:12px;"></div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: ORDERS
+      ========================== -->
+      <section class="page" id="page-orders" data-page="orders">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="od_title">Orders</h3>
+            <span class="chip" data-i="od_note">Seus pedidos recentes (mock)</span>
+          </div>
+
+          <div class="tablewrap">
+            <table class="order-table">
+              <thead>
+                <tr>
+                  <th style="width:110px;">ID</th>
+                  <th data-i="od_service">Serviço</th>
+                  <th data-i="od_link">Link</th>
+                  <th class="nowrap" data-i="od_date">Data</th>
+                  <th class="nowrap" data-i="od_qty">Quantidade</th>
+                  <th class="nowrap" data-i="od_price">Preço</th>
+                  <th class="nowrap" data-i="od_start">Inicial</th>
+                  <th class="nowrap" data-i="od_final">Final</th>
+                  <th class="nowrap" data-i="od_status">Status</th>
+                  <th class="right nowrap" data-i="od_actions">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="orderRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: MASS ORDER
+      ========================== -->
+      <section class="page" id="page-mass" data-page="mass">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="mo_title">Mass Order</h3>
+            <span class="chip" data-i="mo_format">Formato: service_id | link | quantity</span>
+          </div>
+
+          <div class="split">
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;" data-i="mo_paste">Cole aqui</h3>
+              <textarea class="textarea" id="moText" placeholder="1234|https://instagram.com/...|100"></textarea>
+              <div class="hint" style="margin-top:10px;">
+                <span data-i="mo_hint">Uma linha por pedido. Separador: |</span>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn ghost" type="button" id="moClear" data-i="btn_clear">Limpar</button>
+                <button class="btn success" type="button" id="moValidate" data-i="mo_validate">Validar</button>
+              </div>
+            </div>
+
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;" data-i="mo_preview">Prévia</h3>
+              <div class="hint" id="moPreview">
+                <span data-i="mo_preview_hint">Valide para ver quantos pedidos foram reconhecidos.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: ADD FUNDS
+      ========================== -->
+      <section class="page" id="page-addfunds" data-page="addfunds">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="af_title">Add Funds</h3>
+            <span class="chip" data-i="af_methods">PIX • Crypto • Card (mock)</span>
+          </div>
+
+          <div class="split">
+            <div class="card" style="margin:0;">
+              <div class="row">
+                <div>
+                  <label class="small muted" data-i="af_amount">Valor</label>
+                  <input class="input" id="afAmount" type="number" min="1" value="50" />
+                </div>
+                <div>
+                  <label class="small muted" data-i="af_method">Método</label>
+                  <select class="select" id="afMethod">
+                    <option value="pix">PIX</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="card">Card</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row one" id="afCpfRow">
+                <div>
+                  <label class="small muted" data-i="af_cpf">CPF (PIX)</label>
+                  <input class="input" id="afCpf" placeholder="000.000.000-00" />
+                </div>
+              </div>
+              <div class="row one">
+                <div>
+                  <label class="small muted" data-i="af_email">Email (recibo)</label>
+                  <input class="input" id="afEmail" placeholder="email@exemplo.com" />
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn success" type="button" id="afGenerate" data-i="af_generate">Gerar pagamento</button>
+              </div>
+              <div class="hint" id="afResult" style="display:none;margin-top:12px;"></div>
+            </div>
+
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;" data-i="af_balance">Saldo</h3>
+              <div class="hint">
+                <strong>R$ <span id="afBalance">0.00</span></strong><br/>
+                <span class="muted small" data-i="af_balance_hint">Mock: saldo local só para UI.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: AFFILIATES
+      ========================== -->
+      <section class="page" id="page-affiliates" data-page="affiliates">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="al_title">Affiliates</h3>
+            <span class="chip" data-i="al_rate">Comissão (mock)</span>
+          </div>
+
+          <div class="split">
+            <div class="card" style="margin:0;">
+              <label class="small muted" data-i="al_link">Seu link</label>
+              <input class="input" id="alLink" readonly value="https://seupainel.com/?ref=dan1zinn" />
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn" type="button" id="alCopy" data-i="al_copy">Copiar</button>
+              </div>
+              <div class="hint" id="alCopied" style="display:none;margin-top:12px;"></div>
+            </div>
+
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;" data-i="al_stats">Estatísticas</h3>
+              <div class="hint">
+                <div><strong data-i="al_clicks">Cliques</strong>: <span id="alClicks">0</span></div>
+                <div><strong data-i="al_signups">Cadastros</strong>: <span id="alSignups">0</span></div>
+                <div><strong data-i="al_earnings">Ganhos</strong>: R$ <span id="alEarnings">0.00</span></div>
+                <div class="muted small" style="margin-top:6px;" data-i="al_stats_hint">Mock: números gerados localmente.</div>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn success" type="button" id="alSimulate" data-i="al_simulate">Simular</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: TICKETS
+      ========================== -->
+      <section class="page" id="page-tickets" data-page="tickets">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="tk_title">Tickets</h3>
+            <span class="chip" data-i="tk_sla">SLA: 24-72h (mock)</span>
+          </div>
+
+          <div class="split">
+            <div class="card" style="margin:0;">
+              <div class="row">
+                <div>
+                  <label class="small muted" data-i="tk_subject">Assunto</label>
+                  <input class="input" id="tkSubject" placeholder="Ex: Pedido em processamento..." />
+                </div>
+                <div>
+                  <label class="small muted" data-i="tk_priority">Prioridade</label>
+                  <select class="select" id="tkPriority">
+                    <option value="low" data-i="tk_low">Baixa</option>
+                    <option value="med" data-i="tk_med">Média</option>
+                    <option value="high" data-i="tk_high">Alta</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row one">
+                <div>
+                  <label class="small muted" data-i="tk_message">Mensagem</label>
+                  <textarea class="textarea" id="tkMessage" placeholder="Descreva o problema..."></textarea>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn success" type="button" id="tkSend" data-i="tk_send">Abrir ticket</button>
+              </div>
+              <div class="hint" id="tkResult" style="display:none;margin-top:12px;"></div>
+            </div>
+
+            <div class="card" style="margin:0;">
+              <div class="panelTitle" style="margin-bottom:8px;">
+                <h3 data-i="tk_history">Histórico</h3>
+                <input class="input" id="tkSearch" placeholder="Buscar ticket..." />
+              </div>
+              <div class="ticket-list" id="tkHistory"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: FAQ
+      ========================== -->
+      <section class="page" id="page-faq" data-page="faq">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="fq_title">FAQ</h3>
+            <span class="chip" data-i="fq_quick">Respostas rápidas</span>
+          </div>
+
+          <div class="card" style="margin:0;">
+            <div class="hint">
+              <strong data-i="fq_q1">Como funciona o delivery?</strong><br/>
+              <span data-i="fq_a1">Os pedidos são processados automaticamente (mock). Em produção, isso vem do seu provedor/API.</span>
+              <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
+              <strong data-i="fq_q2">Reembolso e refill?</strong><br/>
+              <span data-i="fq_a2">Depende do serviço. Você pode sinalizar serviços Non-Drop / Refill na sua tabela de catálogo.</span>
+              <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
+              <strong data-i="fq_q3">Como usar Mass Order?</strong><br/>
+              <span data-i="fq_a3">Cole uma linha por pedido no formato service_id | link | quantity e valide.</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- =========================
+          PAGE: ACCOUNT
+      ========================== -->
+      <section class="page" id="page-account" data-page="account">
+        <section class="card">
+          <div class="panelTitle">
+            <h3 data-i="ac_title">Conta</h3>
+            <span class="chip" data-i="ac_profile">Perfil</span>
+          </div>
+
+          <div class="account-header">
+            <div class="account-pill">
+              <div class="icon">U</div>
+              <div>
+                <div class="muted small" data-i="ac_user">Usuário</div>
+                <strong>dan1zinn</strong>
+              </div>
+            </div>
+            <div class="account-pill">
+              <div class="icon">@</div>
+              <div>
+                <div class="muted small">Email</div>
+                <strong>dannyel9996@gmail.com</strong>
+              </div>
+            </div>
+            <div class="account-pill">
+              <div class="icon">S</div>
+              <div>
+                <div class="muted small">Skype</div>
+                <strong>dan1zinn</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="split section-divider">
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;">Two-factor authentication</h3>
+              <div class="hint">
+                <div class="muted small">Proteja sua conta com autenticação extra.</div>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:flex-start;margin-top:12px;">
+                <button class="btn success" type="button">Enable</button>
+              </div>
+            </div>
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;" data-i="ac_api">API Key</h3>
+              <input class="input" id="acApi" value="**********************" readonly />
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;">
+                <button class="btn ghost" type="button" id="acReveal" data-i="ac_reveal">Mostrar</button>
+                <button class="btn" type="button" id="acCopy" data-i="ac_copy">Copiar</button>
+              </div>
+              <div class="hint" id="acResult" style="display:none;margin-top:12px;"></div>
+            </div>
+          </div>
+
+          <div class="split section-divider">
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;">Set new password</h3>
+              <div class="row one">
+                <div>
+                  <label class="small muted">Current password</label>
+                  <input class="input" type="password" placeholder="••••••••" />
+                </div>
+              </div>
+              <div class="row">
+                <div>
+                  <label class="small muted">New password</label>
+                  <input class="input" type="password" placeholder="••••••••" />
+                </div>
+                <div>
+                  <label class="small muted">Confirm new password</label>
+                  <input class="input" type="password" placeholder="••••••••" />
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;">
+                <button class="btn success" type="button">Change password</button>
+              </div>
+            </div>
+            <div class="card" style="margin:0;">
+              <h3 style="margin:0 0 8px 0;font-size:13px;">Other Settings</h3>
+              <label class="small muted">Timezone</label>
+              <select class="select" style="margin-top:8px;">
+                <option>(UTC -3:00) Argentina, Brazil, French Guiana, Uruguay</option>
+              </select>
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;">
+                <button class="btn success" type="button">Save</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // =========================================================
+    // I18N (PT/EN)
+    // =========================================================
+    const I18N = {
+      pt: {
+        brand_title: "GrowtifyGlobal",
+        nav_services: "Serviços",
+        nav_create: "Criar pedido",
+        nav_mass: "Mass order",
+        nav_addfunds: "Add funds",
+        nav_affiliates: "Affiliates",
+        nav_tickets: "Tickets",
+        nav_faq: "FAQ",
+        nav_account: "Conta",
+        nav_orders: "Orders",
+        tip: "Dica",
+        tip2: "abre busca",
+        tip3: "Design minimalista • foco em operador.",
+        user_role: "admin • acesso privado",
+        cat_all: "Categoria (todas)",
+        tag_all: "Tag (todas)",
+        btn_clear: "Limpar",
+        tip_short: "Tip:",
+        tip_ctrlk: "Ctrl+K foca a busca",
+        showing: "Mostrando:",
+        services: "serviços",
+        catalog_note: "Catálogo gerado automaticamente (mock)",
+        th_service: "Serviço",
+        th_minmax: "Min / Max",
+        th_rate: "Rate",
+        th_status: "Status",
+
+        // Topbar per page
+        page_services_title: "Serviços",
+        page_services_sub: "Lista compacta • busca rápida • tags • tabela densa",
+        page_create_title: "Criar pedido",
+        page_create_sub: "Categorias • seleção rápida • formulário compacto",
+        page_mass_title: "Mass order",
+        page_mass_sub: "Cole em massa • valide • gere prévia",
+        page_addfunds_title: "Add funds",
+        page_addfunds_sub: "Gerar pagamento (mock) • saldo local",
+        page_orders_title: "Orders",
+        page_orders_sub: "Histórico • status • ações rápidas",
+        page_affiliates_title: "Affiliates",
+        page_affiliates_sub: "Link de referência • simulação de stats",
+        page_tickets_title: "Tickets",
+        page_tickets_sub: "Abrir ticket • histórico (mock)",
+        page_faq_title: "FAQ",
+        page_faq_sub: "Respostas rápidas • regras básicas",
+        page_account_title: "Conta",
+        page_account_sub: "API key (mock) • preferências locais",
+
+        // Create Order
+        co_categories: "Categorias",
+        co_hint_title: "Dica",
+        co_hint_text: "Escolha uma categoria e selecione o serviço para preencher o formulário automaticamente.",
+        co_form_title: "Criar pedido",
+        co_label_service: "Serviço",
+        co_label_quantity: "Quantidade",
+        co_label_link: "Link / Username",
+        co_label_drip: "Drip-feed",
+        co_label_speed: "Velocidade",
+        co_label_notes: "Observações",
+        co_drip_off: "Desativado",
+        co_drip_on: "Ativado",
+        co_speed_auto: "Auto",
+        co_speed_fast: "Rápido",
+        co_speed_safe: "Seguro",
+        co_reset: "Reset",
+        co_submit: "Criar pedido",
+
+        // Orders
+        od_title: "Orders",
+        od_note: "Seus pedidos recentes (mock)",
+        od_service: "Serviço",
+        od_link: "Link",
+        od_date: "Data",
+        od_qty: "Quantidade",
+        od_price: "Preço",
+        od_start: "Inicial",
+        od_final: "Final",
+        od_status: "Status",
+        od_actions: "Ações",
+
+        // Mass order
+        mo_title: "Mass Order",
+        mo_format: "Formato: service_id | link | quantity",
+        mo_paste: "Cole aqui",
+        mo_hint: "Uma linha por pedido. Separador: |",
+        mo_validate: "Validar",
+        mo_preview: "Prévia",
+        mo_preview_hint: "Valide para ver quantos pedidos foram reconhecidos.",
+
+        // Add funds
+        af_title: "Add Funds",
+        af_methods: "PIX • Crypto • Card (mock)",
+        af_amount: "Valor",
+        af_method: "Método",
+        af_cpf: "CPF (PIX)",
+        af_email: "Email (recibo)",
+        af_generate: "Gerar pagamento",
+        af_balance: "Saldo",
+        af_balance_hint: "Mock: saldo local só para UI.",
+
+        // Affiliates
+        al_title: "Affiliates",
+        al_rate: "Comissão (mock)",
+        al_link: "Seu link",
+        al_copy: "Copiar",
+        al_stats: "Estatísticas",
+        al_clicks: "Cliques",
+        al_signups: "Cadastros",
+        al_earnings: "Ganhos",
+        al_stats_hint: "Mock: números gerados localmente.",
+        al_simulate: "Simular",
+
+        // Tickets
+        tk_title: "Tickets",
+        tk_sla: "SLA: 24-72h (mock)",
+        tk_subject: "Assunto",
+        tk_priority: "Prioridade",
+        tk_message: "Mensagem",
+        tk_low: "Baixa",
+        tk_med: "Média",
+        tk_high: "Alta",
+        tk_send: "Abrir ticket",
+        tk_history: "Histórico",
+        tk_history_hint: "Nenhum ticket ainda.",
+
+        // FAQ
+        fq_title: "FAQ",
+        fq_quick: "Respostas rápidas",
+        fq_q1: "Como funciona o delivery?",
+        fq_a1: "Os pedidos são processados automaticamente (mock). Em produção, isso vem do seu provedor/API.",
+        fq_q2: "Reembolso e refill?",
+        fq_a2: "Depende do serviço. Você pode sinalizar serviços Non-Drop / Refill na sua tabela de catálogo.",
+        fq_q3: "Como usar Mass Order?",
+        fq_a3: "Cole uma linha por pedido no formato service_id | link | quantity e valide.",
+
+        // Account
+        ac_title: "Conta",
+        ac_profile: "Perfil",
+        ac_user: "Usuário",
+        ac_role: "Role",
+        ac_api: "API Key",
+        ac_reveal: "Mostrar",
+        ac_copy: "Copiar",
+        ac_settings: "Preferências",
+        ac_pref1: "Tema e idioma ficam salvos no navegador.",
+        ac_pref2: "Você pode ligar isso ao seu backend depois.",
+      },
+
+      en: {
+        brand_title: "GrowtifyGlobal",
+        nav_services: "Services",
+        nav_create: "Create order",
+        nav_mass: "Mass order",
+        nav_addfunds: "Add funds",
+        nav_affiliates: "Affiliates",
+        nav_tickets: "Tickets",
+        nav_faq: "FAQ",
+        nav_account: "Account",
+        nav_orders: "Orders",
+        tip: "Tip",
+        tip2: "opens search",
+        tip3: "Minimal design • operator-focused.",
+        user_role: "admin • private access",
+        cat_all: "Category (all)",
+        tag_all: "Tag (all)",
+        btn_clear: "Clear",
+        tip_short: "Tip:",
+        tip_ctrlk: "Ctrl+K focuses search",
+        showing: "Showing:",
+        services: "services",
+        catalog_note: "Catalog auto-generated (mock)",
+        th_service: "Service",
+        th_minmax: "Min / Max",
+        th_rate: "Rate",
+        th_status: "Status",
+
+        page_services_title: "Services",
+        page_services_sub: "Compact list • fast search • tags • dense table",
+        page_create_title: "Create order",
+        page_create_sub: "Categories • quick selection • compact form",
+        page_mass_title: "Mass order",
+        page_mass_sub: "Paste in bulk • validate • preview",
+        page_addfunds_title: "Add funds",
+        page_addfunds_sub: "Generate payment (mock) • local balance",
+        page_orders_title: "Orders",
+        page_orders_sub: "History • status • quick actions",
+        page_affiliates_title: "Affiliates",
+        page_affiliates_sub: "Referral link • stats simulation",
+        page_tickets_title: "Tickets",
+        page_tickets_sub: "Open ticket • history (mock)",
+        page_faq_title: "FAQ",
+        page_faq_sub: "Quick answers • basic rules",
+        page_account_title: "Account",
+        page_account_sub: "API key (mock) • local preferences",
+
+        co_categories: "Categories",
+        co_hint_title: "Tip",
+        co_hint_text: "Pick a category and select a service to auto-fill the form.",
+        co_form_title: "Create order",
+        co_label_service: "Service",
+        co_label_quantity: "Quantity",
+        co_label_link: "Link / Username",
+        co_label_drip: "Drip-feed",
+        co_label_speed: "Speed",
+        co_label_notes: "Notes",
+        co_drip_off: "Off",
+        co_drip_on: "On",
+        co_speed_auto: "Auto",
+        co_speed_fast: "Fast",
+        co_speed_safe: "Safe",
+        co_reset: "Reset",
+        co_submit: "Create order",
+
+        od_title: "Orders",
+        od_note: "Recent orders (mock)",
+        od_service: "Service",
+        od_link: "Link",
+        od_date: "Date",
+        od_qty: "Quantity",
+        od_price: "Price",
+        od_start: "Start",
+        od_final: "Final",
+        od_status: "Status",
+        od_actions: "Actions",
+
+        mo_title: "Mass Order",
+        mo_format: "Format: service_id | link | quantity",
+        mo_paste: "Paste here",
+        mo_hint: "One line per order. Separator: |",
+        mo_validate: "Validate",
+        mo_preview: "Preview",
+        mo_preview_hint: "Validate to see how many orders were recognized.",
+
+        af_title: "Add Funds",
+        af_methods: "PIX • Crypto • Card (mock)",
+        af_amount: "Amount",
+        af_method: "Method",
+        af_cpf: "CPF (PIX)",
+        af_email: "Email (receipt)",
+        af_generate: "Generate payment",
+        af_balance: "Balance",
+        af_balance_hint: "Mock: local balance for UI only.",
+
+        al_title: "Affiliates",
+        al_rate: "Commission (mock)",
+        al_link: "Your link",
+        al_copy: "Copy",
+        al_stats: "Stats",
+        al_clicks: "Clicks",
+        al_signups: "Signups",
+        al_earnings: "Earnings",
+        al_stats_hint: "Mock: locally generated numbers.",
+        al_simulate: "Simulate",
+
+        tk_title: "Tickets",
+        tk_sla: "SLA: 24-72h (mock)",
+        tk_subject: "Subject",
+        tk_priority: "Priority",
+        tk_message: "Message",
+        tk_low: "Low",
+        tk_med: "Medium",
+        tk_high: "High",
+        tk_send: "Open ticket",
+        tk_history: "History",
+        tk_history_hint: "No tickets yet.",
+
+        fq_title: "FAQ",
+        fq_quick: "Quick answers",
+        fq_q1: "How does delivery work?",
+        fq_a1: "Orders are processed automatically (mock). In production, this comes from your provider/API.",
+        fq_q2: "Refund and refill?",
+        fq_a2: "It depends on the service. You can label Non-Drop / Refill services in your catalog.",
+        fq_q3: "How to use Mass Order?",
+        fq_a3: "Paste one line per order using service_id | link | quantity and validate.",
+
+        ac_title: "Account",
+        ac_profile: "Profile",
+        ac_user: "Username",
+        ac_role: "Role",
+        ac_api: "API Key",
+        ac_reveal: "Reveal",
+        ac_copy: "Copy",
+        ac_settings: "Preferences",
+        ac_pref1: "Theme and language are saved in the browser.",
+        ac_pref2: "You can wire this to your backend later.",
+      }
+    };
+
+    // =========================================================
+    // SPA ROUTER
+    // =========================================================
+    const PAGES = ["services","create","orders","mass","addfunds","affiliates","tickets","faq","account"];
+    const pageTitle = document.getElementById("pageTitle");
+    const pageSub = document.getElementById("pageSub");
+    const nav = document.getElementById("nav");
+
+    function setActivePage(route){
+      PAGES.forEach(p=>{
+        document.getElementById("page-"+p).classList.toggle("active", p === route);
+        const link = nav.querySelector(`[data-route="${p}"]`);
+        if (link) link.classList.toggle("active", p === route);
+      });
+
+      const lang = document.documentElement.getAttribute("data-lang") || "pt";
+      const t = I18N[lang] || I18N.pt;
+      pageTitle.textContent = t[`page_${route}_title`] || route;
+      pageSub.textContent = t[`page_${route}_sub`] || "";
+
+      // Services hotkeys only makes sense in services page
+      const pill = nav.querySelector('[data-route="services"] .pill');
+      if (pill) pill.style.opacity = route === "services" ? "1" : "0.5";
+    }
+
+    function getRouteFromHash(){
+      const h = (location.hash || "#services").replace("#","");
+      return PAGES.includes(h) ? h : "services";
+    }
+
+    window.addEventListener("hashchange", ()=> setActivePage(getRouteFromHash()));
+    nav.addEventListener("click", (e)=>{
+      const a = e.target.closest("a[data-route]");
+      if (!a) return;
+      // default anchor behavior sets hash
+      const anchor = a.getAttribute("data-anchor");
+      if (anchor === "ai"){
+        const ai = document.getElementById("aiSection");
+        if (ai){
+          ai.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+      }
+    });
+
+    // =========================================================
+    // THEME TOGGLE + PERSIST
+    // =========================================================
+    const themeToggle = document.getElementById("themeToggle");
+    const themeSwitch = document.getElementById("themeSwitch");
+    const themeLabel = document.getElementById("themeLabel");
+
+    function applyTheme(theme){
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("ui_theme", theme);
+      const isDark = theme === "dark";
+      themeSwitch.classList.toggle("on", isDark);
+      themeLabel.textContent = isDark ? "Light" : "Dark";
+    }
+
+    themeToggle.addEventListener("click", ()=>{
+      const current = document.documentElement.getAttribute("data-theme") || "blue";
+      const next = current === "dark" ? "blue" : "dark";
+      applyTheme(next);
+    });
+
+    // =========================================================
+    // LANGUAGE TOGGLE + PERSIST
+    // =========================================================
+    const langPT = document.getElementById("langPT");
+    const langEN = document.getElementById("langEN");
+
+    function applyLang(lang){
+      document.documentElement.setAttribute("data-lang", lang);
+      localStorage.setItem("ui_lang", lang);
+
+      langPT.classList.toggle("active", lang === "pt");
+      langEN.classList.toggle("active", lang === "en");
+
+      const dict = I18N[lang] || I18N.pt;
+      document.querySelectorAll("[data-i]").forEach(el=>{
+        const key = el.getAttribute("data-i");
+        if (dict[key]) el.textContent = dict[key];
+      });
+
+      // Update placeholders that are language-sensitive
+      const q = document.getElementById("q");
+      if (q){
+        q.placeholder = lang === "en"
+          ? "Search (e.g. tiktok, br, premium, retention, members, likes)..."
+          : "Buscar (ex: tiktok, br, premium, retention, members, likes)...";
+      }
+
+      const moText = document.getElementById("moText");
+      if (moText){
+        moText.placeholder = lang === "en"
+          ? "1234|https://instagram.com/...|100"
+          : "1234|https://instagram.com/...|100";
+      }
+
+      const tkSubject = document.getElementById("tkSubject");
+      if (tkSubject){
+        tkSubject.placeholder = lang === "en"
+          ? "E.g. Order stuck..."
+          : "Ex: Pedido em processamento...";
+      }
+
+      const tkMessage = document.getElementById("tkMessage");
+      if (tkMessage){
+        tkMessage.placeholder = lang === "en"
+          ? "Describe the issue..."
+          : "Descreva o problema...";
+      }
+
+      const tkSearch = document.getElementById("tkSearch");
+      if (tkSearch){
+        tkSearch.placeholder = lang === "en"
+          ? "Search ticket..."
+          : "Buscar ticket...";
+      }
+
+      if (coSummaryText){
+        coSummaryText.textContent = lang === "en"
+          ? "Select a service to see quick details."
+          : "Selecione um serviço para ver detalhes rápidos.";
+      }
+
+      // Re-apply current route titles
+      setActivePage(getRouteFromHash());
+      renderOrders();
+    }
+
+    langPT.addEventListener("click", ()=> applyLang("pt"));
+    langEN.addEventListener("click", ()=> applyLang("en"));
+
+    // =========================================================
+    // SERVICES CATALOG (seu mock original)
+    // =========================================================
+    const CATALOG = [
+      { cat:"instagram", type:"Followers", variants:["world","br"] },
+      { cat:"instagram", type:"Likes", variants:["world","br"] },
+      { cat:"instagram", type:"Reels Views", variants:["world"] },
+
+      { cat:"tiktok", type:"Followers", variants:["world","br"] },
+      { cat:"tiktok", type:"Likes", variants:["world","br"] },
+      { cat:"tiktok", type:"Views", variants:["world","br"] },
+      { cat:"tiktok", type:"Shares", variants:["world"] },
+      { cat:"tiktok", type:"Saves", variants:["world"] },
+
+      { cat:"twitter", type:"Followers", variants:["world","br"] },
+      { cat:"twitter", type:"Likes", variants:["world","br"] },
+      { cat:"twitter", type:"Retweets", variants:["world","br"] },
+      { cat:"twitter", type:"Views", variants:["world","br"] },
+
+      { cat:"telegram", type:"Members", variants:["world","br","premium"] },
+      { cat:"telegram", type:"Views", variants:["world","br","premium"], packs:[5,10,20,50,100], packLabel:"Last posts" },
+      { cat:"telegram", type:"Reactions", variants:["world","br","premium"] },
+
+      { cat:"facebook", type:"Likes", variants:["world","br"] },
+      { cat:"facebook", type:"Page Followers + Likes", variants:["world","br"] },
+      { cat:"facebook", type:"Personal Profile Followers", variants:["world","br"] },
+      { cat:"facebook", type:"Video/Reels Views", variants:["world","br","retention"], note:"monetizáveis" },
+
+      { cat:"kwai", type:"Followers", variants:["world","br"] },
+      { cat:"kwai", type:"Likes", variants:["world","br"] },
+      { cat:"kwai", type:"Views", variants:["world","br"] },
+      { cat:"kwai", type:"Shares", variants:["world","br"] },
+
+      { cat:"youtube", type:"Subscribers", variants:["world","br"] },
+      { cat:"youtube", type:"Likes", variants:["world","br"] },
+      { cat:"youtube", type:"Live Viewers", variants:["world"] },
+      { cat:"youtube", type:"Watchtime", variants:["world"] },
+
+      { cat:"spotify", type:"Followers", variants:["world","br"] },
+      { cat:"spotify", type:"Playlist Likes", variants:["world"] },
+      { cat:"spotify", type:"Monthly Listeners", variants:["world"] },
+
+      { cat:"twitch", type:"Followers", variants:["world","br"] },
+      { cat:"twitch", type:"Live Viewers", variants:["world"] },
+
+      { cat:"discord", type:"Members", variants:["online","offline"] },
+
+      { cat:"kick", type:"Live Viewers", variants:["world","br"] },
+      { cat:"kick", type:"Followers", variants:["world","br"] },
+    ];
+
+    const labelMap = {
+      br: "BR",
+      world: "WORLD",
+      premium: "PREMIUM",
+      online: "ONLINE",
+      offline: "OFFLINE",
+      retention: "RETENTION",
+    };
+
+    function buildBadges(variant){
+      const badges = [];
+      if (Object.keys(labelMap).includes(variant)) badges.push(variant);
+      return badges;
+    }
+
+    let ID = 10000;
+
+    function makeRow({cat, type, variant, pack, note, packLabel}){
+      const badges = buildBadges(variant);
+      const vLabel = labelMap[variant] ? ` | ${labelMap[variant]}` : "";
+      const pLabel = pack ? ` | ${packLabel || "Pack"} ${pack}` : "";
+      const nLabel = note ? ` • ${note}` : "";
+
+      // Simple "pricing" mock so UI looks alive
+      const base = 0.5 + (cat.length % 3) * 0.35;
+      const mult = (variant === "premium") ? 1.8 : (variant === "retention") ? 2.2 : 1.0;
+      const rate = (base * mult).toFixed(2);
+
+      return {
+        id: ID++,
+        cat,
+        name: `${cat.toUpperCase()} - ${type}${vLabel}${pLabel}`,
+        desc: `Serviço cadastrado (mock)${nLabel}`,
+        min: pack ? pack : 10,
+        max: (variant === "premium" || variant === "retention") ? 100000 : 50000,
+        rate: `$${rate} / 1k`,
+        status: "Online",
+        badges
+      };
+    }
+
+    function generateServices(){
+      const out = [];
+      for (const item of CATALOG){
+        const {cat, type, variants, packs, note, packLabel} = item;
+
+        if (packs && packs.length){
+          for (const variant of variants){
+            for (const p of packs){
+              out.push(makeRow({cat, type, variant, pack:p, note, packLabel}));
+            }
+          }
+          continue;
+        }
+
+        for (const variant of variants){
+          out.push(makeRow({cat, type, variant, note}));
+        }
+      }
+      return out;
+    }
+
+    const services = generateServices();
+
+    // =========================================================
+    // SERVICES UI: render + filtros
+    // =========================================================
+    const rows = document.getElementById("rows");
+    const q = document.getElementById("q");
+    const cat = document.getElementById("cat");
+    const tag = document.getElementById("tag");
+    const clear = document.getElementById("clear");
+    const count = document.getElementById("count");
+    const aiSection = document.getElementById("aiSection");
+    const aiComingSoon = document.getElementById("aiComingSoon");
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function badgeHTML(b){
+      const label = (labelMap[b] || b).toUpperCase();
+      const cls =
+        b === "br" ? "br" :
+        (b === "premium" ? "good" :
+        (b === "retention" ? "warn" : ""));
+      return `<span class="badge ${cls}">${label}</span>`;
+    }
+
+    function render(list){
+      rows.innerHTML = list.map(s => `
+        <tr data-id="${s.id}">
+          <td><span class="idbadge">${s.id}</span></td>
+          <td>
+            <div class="svc">
+              <div class="name">${escapeHtml(s.name)}</div>
+              <div class="desc">${escapeHtml(s.desc)}</div>
+              <div class="badges">${s.badges.map(badgeHTML).join("")}</div>
+            </div>
+          </td>
+          <td class="nowrap"><span class="muted">${s.min}</span> / <span class="muted">${s.max}</span></td>
+          <td class="right nowrap"><span class="rate">${escapeHtml(s.rate)}</span></td>
+          <td class="right nowrap">
+            <span class="chip" style="display:inline-flex;align-items:center;gap:6px;">
+              <span style="width:8px;height:8px;border-radius:999px;background:rgba(34,197,94,.9);"></span>
+              <span>${s.status}</span>
+            </span>
+          </td>
+          <td class="right nowrap">
+            <div class="service-actions">
+              <button class="btn small success" type="button" data-action="order" data-id="${s.id}">Order now</button>
+              <button class="btn small warn" type="button" data-action="details" data-id="${s.id}">Details</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+      count.textContent = String(list.length);
+
+      rows.querySelectorAll("button[data-action]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = Number(btn.getAttribute("data-id"));
+          const action = btn.getAttribute("data-action");
+          const svc = services.find(item => item.id === id);
+          if (!svc) return;
+
+          if (action === "order"){
+            location.hash = "#create";
+            setTimeout(()=>{
+              const match = ORDER_CATEGORIES.flatMap(c=>c.items).find(item => svc.name.includes(item.name.split(" • ")[0]));
+              if (match){
+                selectedServiceId = match.id;
+                renderOrderServiceSelect(match);
+                coSelected.textContent = match.name;
+              }
+            }, 50);
+            return;
+          }
+
+          if (action === "details"){
+            const details = document.getElementById("serviceDetails");
+            const detailsDesc = document.getElementById("serviceDetailsDesc");
+            const detailsBadges = document.getElementById("serviceDetailsBadges");
+            const detailsId = document.getElementById("serviceDetailsId");
+            const detailsMinMax = document.getElementById("serviceDetailsMinMax");
+            const detailsRate = document.getElementById("serviceDetailsRate");
+            const detailsStatus = document.getElementById("serviceDetailsStatus");
+            details.style.display = "block";
+            detailsDesc.textContent = `${svc.name} • ${svc.desc} • Entrega automática com monitoramento de status.`;
+            detailsBadges.innerHTML = svc.badges.map(badgeHTML).join("");
+            detailsId.textContent = `#${svc.id}`;
+            detailsMinMax.textContent = `${svc.min} / ${svc.max}`;
+            detailsRate.textContent = svc.rate;
+            detailsStatus.textContent = svc.status;
+            details.scrollIntoView({behavior:"smooth", block:"center"});
+          }
+        });
+      });
+    }
+
+    function applyFilters(){
+      const text = q.value.trim().toLowerCase();
+      const c = cat.value;
+      const t = tag.value;
+
+      const filtered = services.filter(s => {
+        const hay = (s.name + " " + s.desc + " " + s.badges.join(" ") + " " + s.cat).toLowerCase();
+        const okText = !text || hay.includes(text);
+        const okCat  = !c || s.cat === c;
+        const okTag  = !t || s.badges.includes(t);
+        return okText && okCat && okTag;
+      });
+
+      render(filtered);
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k"){
+        e.preventDefault();
+        const route = getRouteFromHash();
+        if (route !== "services"){
+          location.hash = "#services";
+          setTimeout(()=> q && q.focus(), 30);
+        } else {
+          q && q.focus();
+        }
+      }
+    });
+
+    [q, cat, tag].forEach(el => el.addEventListener("input", applyFilters));
+    clear.addEventListener("click", () => {
+      q.value = "";
+      cat.value = "";
+      tag.value = "";
+      applyFilters();
+      q.focus();
+    });
+    if (aiSection && aiComingSoon){
+      aiSection.addEventListener("click", ()=>{
+        aiComingSoon.style.display = "block";
+        aiComingSoon.scrollIntoView({behavior:"smooth", block:"center"});
+      });
+    }
+
+    // =========================================================
+    // CREATE ORDER UI (Categorias + cards)
+    // =========================================================
+    const ORDER_CATEGORIES = [
+      {
+        id:"top",
+        title:{pt:"Top Selling Services", en:"Top Selling Services"},
+        meta:{pt:"Mais vendidos • alta conversão", en:"Best sellers • high conversion"},
+        items:[
+          { id:"ts1", name:"TikTok Followers • WORLD", desc:"Entrega rápida • bom custo/benefício", badges:["world"] },
+          { id:"ts2", name:"Instagram Likes • BR", desc:"Boa estabilidade • social proof", badges:["br"] },
+          { id:"ts3", name:"Telegram Members • PREMIUM", desc:"Alta qualidade • maior retenção", badges:["premium"] },
+        ]
+      },
+      {
+        id:"quality",
+        title:{pt:"Best Quality Services", en:"Best Quality Services"},
+        meta:{pt:"Foco em qualidade e estabilidade", en:"Quality & stability focus"},
+        items:[
+          { id:"bq1", name:"YouTube Subscribers • WORLD", desc:"Qualidade premium (mock)", badges:["world","retention"] },
+          { id:"bq2", name:"Instagram Followers • WORLD", desc:"Mix seguro • entrega gradual", badges:["world"] },
+          { id:"bq3", name:"Twitter/X Followers • BR", desc:"Mais natural (mock)", badges:["br"] },
+        ]
+      },
+      {
+        id:"nondrop",
+        title:{pt:"Non-Drop Services", en:"Non-Drop Services"},
+        meta:{pt:"Recomendado para perfil principal", en:"Recommended for main profiles"},
+        items:[
+          { id:"nd1", name:"TikTok Likes • PREMIUM", desc:"Non-drop (mock) • refill", badges:["premium"] },
+          { id:"nd2", name:"Instagram Followers • PREMIUM", desc:"Maior retenção (mock)", badges:["premium","retention"] },
+          { id:"nd3", name:"Telegram Views • PREMIUM (Last posts)", desc:"Views em pacotes (mock)", badges:["premium"] },
+        ]
+      },
+      {
+        id:"budget",
+        title:{pt:"Budget Services", en:"Budget Services"},
+        meta:{pt:"Preço baixo • uso para testes", en:"Low price • testing"},
+        items:[
+          { id:"bg1", name:"Kwai Views • WORLD", desc:"Barato • volume", badges:["world"] },
+          { id:"bg2", name:"Facebook Likes • WORLD", desc:"Custo baixo (mock)", badges:["world"] },
+          { id:"bg3", name:"Discord Members • OFFLINE", desc:"Entrada rápida (mock)", badges:["offline"] },
+        ]
+      }
+    ];
+
+    const coCats = document.getElementById("coCats");
+    const coGrid = document.getElementById("coGrid");
+    const coCount = document.getElementById("coCount");
+    const coService = document.getElementById("coService");
+    const coSelected = document.getElementById("coSelected");
+    const coQty = document.getElementById("coQty");
+    const coLink = document.getElementById("coLink");
+    const coDrip = document.getElementById("coDrip");
+    const coSpeed = document.getElementById("coSpeed");
+    const coNotes = document.getElementById("coNotes");
+    const coReset = document.getElementById("coReset");
+    const coSubmit = document.getElementById("coSubmit");
+    const coResult = document.getElementById("coResult");
+    const coSummaryBadges = document.getElementById("coSummaryBadges");
+    const coSummaryText = document.getElementById("coSummaryText");
+
+    let activeCategory = ORDER_CATEGORIES[0].id;
+    let selectedServiceId = null;
+
+    function getLang(){ return document.documentElement.getAttribute("data-lang") || "pt"; }
+
+    function renderOrderCategories(){
+      const lang = getLang();
+      coCount.textContent = String(ORDER_CATEGORIES.length);
+
+      coCats.innerHTML = ORDER_CATEGORIES.map(c => `
+        <button class="catbtn ${c.id===activeCategory ? "active":""}" type="button" data-cat="${c.id}">
+          <span>
+            <div style="font-weight:700;">${escapeHtml(c.title[lang] || c.title.pt)}</div>
+            <div class="catmeta">${escapeHtml(c.meta[lang] || c.meta.pt)}</div>
+          </span>
+          <span class="chip">${c.items.length}</span>
+        </button>
+      `).join("");
+
+      coCats.querySelectorAll(".catbtn").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          activeCategory = btn.getAttribute("data-cat");
+          selectedServiceId = null;
+          renderOrderGrid();
+          renderOrderCategories();
+          renderOrderServiceSelect();
+          coSelected.textContent = "—";
+          coResult.style.display = "none";
+        });
+      });
+    }
+
+    function renderOrderGrid(){
+      const catObj = ORDER_CATEGORIES.find(c=>c.id===activeCategory) || ORDER_CATEGORIES[0];
+      const lang = getLang();
+
+      coGrid.innerHTML = catObj.items.map(item=>{
+        const b = (item.badges || []).map(x=>{
+          const label = (labelMap[x] || x).toUpperCase();
+          const cls = x==="br" ? "br" : (x==="premium" ? "good" : (x==="retention" ? "warn" : ""));
+          return `<span class="badge ${cls}">${label}</span>`;
+        }).join("");
+
+        return `
+          <div class="svcCard">
+            <h3>${escapeHtml(item.name)}</h3>
+            <p>${escapeHtml(item.desc)}</p>
+            <div class="badges" style="margin-bottom:10px;">${b}</div>
+            <button class="btn" type="button" data-svc="${item.id}">
+              ${lang==="en" ? "Select" : "Selecionar"}
+            </button>
+          </div>
+        `;
+      }).join("");
+
+      coGrid.querySelectorAll("button[data-svc]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          selectedServiceId = btn.getAttribute("data-svc");
+          const svc = findOrderService(selectedServiceId);
+          coSelected.textContent = svc ? svc.name : "—";
+          renderOrderServiceSelect(svc);
+          coResult.style.display = "none";
+          // scroll to form
+          document.getElementById("coService").scrollIntoView({behavior:"smooth", block:"center"});
+        });
+      });
+    }
+
+    function findOrderService(id){
+      for (const c of ORDER_CATEGORIES){
+        const s = c.items.find(x=>x.id===id);
+        if (s) return s;
+      }
+      return null;
+    }
+
+    function renderOrderServiceSelect(selected){
+      const lang = getLang();
+      const options = [];
+      ORDER_CATEGORIES.forEach(c=>{
+        options.push(`<optgroup label="${escapeHtml(c.title[lang] || c.title.pt)}">`);
+        c.items.forEach(s=>{
+          const sel = (selected && s.id === selected.id) || (selectedServiceId && s.id === selectedServiceId);
+          options.push(`<option value="${s.id}" ${sel ? "selected":""}>${escapeHtml(s.name)}</option>`);
+        });
+        options.push(`</optgroup>`);
+      });
+
+      coService.innerHTML = options.join("");
+    }
+
+    function updateOrderSummary(svc){
+      if (!coSummaryBadges || !coSummaryText) return;
+      if (!svc){
+        coSummaryBadges.innerHTML = "";
+        coSummaryText.textContent = "Selecione um serviço para ver detalhes rápidos.";
+        return;
+      }
+      coSummaryBadges.innerHTML = (svc.badges || []).map(badgeHTML).join("");
+      coSummaryText.textContent = `${svc.desc} • Garantia e velocidade variam por serviço.`;
+    }
+
+    coService.addEventListener("change", ()=>{
+      selectedServiceId = coService.value;
+      const svc = findOrderService(selectedServiceId);
+      coSelected.textContent = svc ? svc.name : "—";
+      updateOrderSummary(svc);
+      coResult.style.display = "none";
+    });
+
+    coReset.addEventListener("click", ()=>{
+      selectedServiceId = null;
+      coSelected.textContent = "—";
+      coQty.value = 100;
+      coLink.value = "";
+      coDrip.value = "off";
+      coSpeed.value = "auto";
+      coNotes.value = "";
+      updateOrderSummary(null);
+      coResult.style.display = "none";
+    });
+
+    coSubmit.addEventListener("click", ()=>{
+      const lang = getLang();
+      const svc = findOrderService(selectedServiceId || coService.value);
+      const qty = Number(coQty.value || 0);
+      const link = (coLink.value || "").trim();
+
+      if (!svc){
+        coResult.style.display = "block";
+        coResult.innerHTML = lang==="en"
+          ? "<strong>Error:</strong> Select a service."
+          : "<strong>Erro:</strong> selecione um serviço.";
+        return;
+      }
+      if (!link){
+        coResult.style.display = "block";
+        coResult.innerHTML = lang==="en"
+          ? "<strong>Error:</strong> Provide a link/username."
+          : "<strong>Erro:</strong> informe um link/username.";
+        return;
+      }
+      if (!qty || qty < 1){
+        coResult.style.display = "block";
+        coResult.innerHTML = lang==="en"
+          ? "<strong>Error:</strong> Quantity must be at least 1."
+          : "<strong>Erro:</strong> quantidade mínima 1.";
+        return;
+      }
+
+      const mockId = Math.floor(100000 + Math.random()*900000);
+      coResult.style.display = "block";
+      coResult.innerHTML = lang==="en"
+        ? `<strong>Created (mock):</strong> Order #${mockId}<br/><span class="muted">Service:</span> ${escapeHtml(svc.name)} • <span class="muted">Qty:</span> ${qty} • <span class="muted">Link:</span> ${escapeHtml(link)}`
+        : `<strong>Criado (mock):</strong> Pedido #${mockId}<br/><span class="muted">Serviço:</span> ${escapeHtml(svc.name)} • <span class="muted">Qtd:</span> ${qty} • <span class="muted">Link:</span> ${escapeHtml(link)}`;
+    });
+
+    // =========================================================
+    // MASS ORDER LOGIC
+    // =========================================================
+    const moText = document.getElementById("moText");
+    const moClear = document.getElementById("moClear");
+    const moValidate = document.getElementById("moValidate");
+    const moPreview = document.getElementById("moPreview");
+
+    moClear.addEventListener("click", ()=>{
+      moText.value = "";
+      const lang = getLang();
+      moPreview.innerHTML = lang==="en"
+        ? "Cleared."
+        : "Limpo.";
+    });
+
+    moValidate.addEventListener("click", ()=>{
+      const lang = getLang();
+      const lines = (moText.value || "")
+        .split("\n")
+        .map(x=>x.trim())
+        .filter(Boolean);
+
+      const parsed = [];
+      const errors = [];
+
+      lines.forEach((line, idx)=>{
+        const parts = line.split("|").map(x=>x.trim());
+        if (parts.length !== 3){
+          errors.push({line: idx+1, msg: "format"});
+          return;
+        }
+        const [sid, link, qty] = parts;
+        const nQty = Number(qty);
+        if (!sid || !link || !nQty || nQty < 1){
+          errors.push({line: idx+1, msg: "invalid"});
+          return;
+        }
+        parsed.push({sid, link, qty:nQty});
+      });
+
+      if (!lines.length){
+        moPreview.innerHTML = lang==="en"
+          ? "Paste something first."
+          : "Cole algo primeiro.";
+        return;
+      }
+
+      const ok = parsed.length;
+      const bad = errors.length;
+
+      let html = `<strong>${lang==="en" ? "Result" : "Resultado"}:</strong> ${ok} ${lang==="en" ? "orders" : "pedidos"}<br/>`;
+      html += `<span class="muted">${lang==="en" ? "Errors" : "Erros"}:</span> ${bad}`;
+
+      if (ok){
+        html += `<hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">`;
+        html += `<div class="muted small">${lang==="en" ? "First 5:" : "Primeiros 5:"}</div>`;
+        html += `<ul style="margin:8px 0 0 18px;padding:0;">`;
+        parsed.slice(0,5).forEach(p=>{
+          html += `<li class="small"><span class="muted">#</span>${escapeHtml(p.sid)} • ${escapeHtml(p.link)} • <span class="muted">${lang==="en" ? "qty" : "qtd"}:</span> ${p.qty}</li>`;
+        });
+        html += `</ul>`;
+      }
+
+      if (bad){
+        html += `<hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">`;
+        html += `<div class="muted small">${lang==="en" ? "Invalid lines:" : "Linhas inválidas:"}</div>`;
+        html += `<ul style="margin:8px 0 0 18px;padding:0;">`;
+        errors.slice(0,6).forEach(e=>{
+          html += `<li class="small">${lang==="en" ? "Line" : "Linha"} ${e.line}: ${e.msg}</li>`;
+        });
+        if (errors.length > 6){
+          html += `<li class="small muted">+${errors.length-6}...</li>`;
+        }
+        html += `</ul>`;
+      }
+
+      moPreview.innerHTML = html;
+    });
+
+    // =========================================================
+    // ADD FUNDS (mock balance)
+    // =========================================================
+    const afAmount = document.getElementById("afAmount");
+    const afMethod = document.getElementById("afMethod");
+    const afEmail  = document.getElementById("afEmail");
+    const afCpf = document.getElementById("afCpf");
+    const afCpfRow = document.getElementById("afCpfRow");
+    const afGenerate = document.getElementById("afGenerate");
+    const afResult = document.getElementById("afResult");
+    const afBalance = document.getElementById("afBalance");
+
+    function getBalance(){
+      return Number(localStorage.getItem("mock_balance") || "0");
+    }
+    function setBalance(v){
+      localStorage.setItem("mock_balance", String(v));
+      afBalance.textContent = v.toFixed(2);
+    }
+
+    afGenerate.addEventListener("click", ()=>{
+      const lang = getLang();
+      const val = Number(afAmount.value || 0);
+      if (!val || val < 1){
+        afResult.style.display = "block";
+        afResult.innerHTML = lang==="en"
+          ? "<strong>Error:</strong> Amount must be at least 1."
+          : "<strong>Erro:</strong> valor mínimo 1.";
+        return;
+      }
+      const method = afMethod.value;
+      const email = (afEmail.value || "").trim();
+      const cpf = (afCpf.value || "").trim();
+
+      if (method === "pix" && !cpf){
+        afResult.style.display = "block";
+        afResult.innerHTML = lang==="en"
+          ? "<strong>Error:</strong> CPF is required for PIX."
+          : "<strong>Erro:</strong> CPF é obrigatório para PIX.";
+        return;
+      }
+
+      const code = "PAY-" + Math.random().toString(16).slice(2,10).toUpperCase();
+      afResult.style.display = "block";
+      afResult.innerHTML = lang==="en"
+        ? `<strong>Payment generated (mock):</strong> ${code}<br/><span class="muted">Method:</span> ${escapeHtml(method)} • <span class="muted">Amount:</span> ${val.toFixed(2)}`
+        : `<strong>Pagamento gerado (mock):</strong> ${code}<br/><span class="muted">Método:</span> ${escapeHtml(method)} • <span class="muted">Valor:</span> ${val.toFixed(2)}`;
+
+      // credit instantly (mock)
+      setBalance(getBalance() + val);
+    });
+
+    // =========================================================
+    // AFFILIATES (mock stats)
+    // =========================================================
+    const alCopy = document.getElementById("alCopy");
+    const alLink = document.getElementById("alLink");
+    const alCopied = document.getElementById("alCopied");
+    const alSimulate = document.getElementById("alSimulate");
+    const alClicks = document.getElementById("alClicks");
+    const alSignups = document.getElementById("alSignups");
+    const alEarnings = document.getElementById("alEarnings");
+
+    function getAff(){
+      try { return JSON.parse(localStorage.getItem("mock_aff") || "{}"); }
+      catch { return {}; }
+    }
+    function setAff(obj){
+      localStorage.setItem("mock_aff", JSON.stringify(obj));
+    }
+    function syncAffUI(){
+      const a = getAff();
+      alClicks.textContent = String(a.clicks || 0);
+      alSignups.textContent = String(a.signups || 0);
+      alEarnings.textContent = Number(a.earnings || 0).toFixed(2);
+    }
+
+    alCopy.addEventListener("click", async ()=>{
+      const lang = getLang();
+      try{
+        await navigator.clipboard.writeText(alLink.value);
+        alCopied.style.display = "block";
+        alCopied.innerHTML = lang==="en" ? "Copied to clipboard." : "Copiado para a área de transferência.";
+      }catch{
+        alCopied.style.display = "block";
+        alCopied.innerHTML = lang==="en" ? "Copy failed (browser blocked)." : "Falha ao copiar (bloqueado pelo navegador).";
+      }
+      setTimeout(()=> alCopied.style.display="none", 1600);
+    });
+
+    alSimulate.addEventListener("click", ()=>{
+      const a = getAff();
+      const addClicks = 10 + Math.floor(Math.random()*90);
+      const addSignups = Math.floor(addClicks * (0.05 + Math.random()*0.08));
+      const addEarnings = addSignups * (2 + Math.random()*6);
+
+      const next = {
+        clicks: (a.clicks||0) + addClicks,
+        signups: (a.signups||0) + addSignups,
+        earnings: Number(a.earnings||0) + addEarnings
+      };
+      setAff(next);
+      syncAffUI();
+    });
+
+    // =========================================================
+    // TICKETS (local history)
+    // =========================================================
+    const tkSubject = document.getElementById("tkSubject");
+    const tkPriority = document.getElementById("tkPriority");
+    const tkMessage = document.getElementById("tkMessage");
+    const tkSend = document.getElementById("tkSend");
+    const tkResult = document.getElementById("tkResult");
+    const tkHistory = document.getElementById("tkHistory");
+    const tkSearch = document.getElementById("tkSearch");
+
+    function getTickets(){
+      try { return JSON.parse(localStorage.getItem("mock_tickets") || "[]"); }
+      catch { return []; }
+    }
+    function setTickets(arr){
+      localStorage.setItem("mock_tickets", JSON.stringify(arr));
+    }
+    function renderTickets(){
+      const lang = getLang();
+      const t = getTickets();
+      const term = (tkSearch && tkSearch.value || "").trim().toLowerCase();
+      const filtered = term
+        ? t.filter(item => `${item.subject} ${item.message} ${item.id}`.toLowerCase().includes(term))
+        : t;
+      if (!filtered.length){
+        tkHistory.innerHTML = `<div class="hint">${I18N[lang].tk_history_hint}</div>`;
+        return;
+      }
+      tkHistory.innerHTML = filtered.slice().reverse().slice(0,8).map(x=>`
+        <div class="ticket-item">
+          <div class="ticket-meta">
+            <div class="ticket-badge">${escapeHtml(x.subject.slice(0,1).toUpperCase())}</div>
+            <div>
+              <strong style="font-size:12px;">#${x.id} • ${escapeHtml(x.subject)}</strong>
+              <div class="muted small">${escapeHtml(x.message)}</div>
+            </div>
+          </div>
+          <div class="right">
+            <div class="badge ${x.priority==="high" ? "warn" : (x.priority==="med" ? "br" : "")}">${escapeHtml(x.priority.toUpperCase())}</div>
+            <div class="muted small" style="margin-top:6px;">${escapeHtml(x.date)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    tkSend.addEventListener("click", ()=>{
+      const lang = getLang();
+      const subject = (tkSubject.value || "").trim();
+      const message = (tkMessage.value || "").trim();
+      const priority = tkPriority.value;
+
+      if (!subject || !message){
+        tkResult.style.display = "block";
+        tkResult.innerHTML = lang==="en"
+          ? "<strong>Error:</strong> Subject and message are required."
+          : "<strong>Erro:</strong> assunto e mensagem são obrigatórios.";
+        return;
+      }
+
+      const id = Math.floor(1000 + Math.random()*9000);
+      const date = new Date().toLocaleString(lang==="en" ? "en-US" : "pt-BR");
+      const t = getTickets();
+      t.push({id, subject, message, priority, date});
+      setTickets(t);
+
+      tkResult.style.display = "block";
+      tkResult.innerHTML = lang==="en"
+        ? `<strong>Ticket opened (mock):</strong> #${id}`
+        : `<strong>Ticket aberto (mock):</strong> #${id}`;
+
+      tkSubject.value = "";
+      tkMessage.value = "";
+      renderTickets();
+      setTimeout(()=> tkResult.style.display="none", 1600);
+    });
+
+    if (tkSearch){
+      tkSearch.addEventListener("input", renderTickets);
+    }
+
+    // =========================================================
+    // ACCOUNT (mock api key reveal/copy)
+    // =========================================================
+    const acApi = document.getElementById("acApi");
+    const acReveal = document.getElementById("acReveal");
+    const acCopy = document.getElementById("acCopy");
+    const acResult = document.getElementById("acResult");
+
+    const REAL_KEY = "API_" + Math.random().toString(36).slice(2,14).toUpperCase();
+
+    let revealed = false;
+    acReveal.addEventListener("click", ()=>{
+      const lang = getLang();
+      revealed = !revealed;
+      acApi.value = revealed ? REAL_KEY : "**********************";
+      acReveal.textContent = revealed ? (lang==="en" ? "Hide" : "Ocultar") : (lang==="en" ? "Reveal" : "Mostrar");
+    });
+
+    acCopy.addEventListener("click", async ()=>{
+      const lang = getLang();
+      const v = revealed ? REAL_KEY : REAL_KEY; // copy real anyway
+      try{
+        await navigator.clipboard.writeText(v);
+        acResult.style.display = "block";
+        acResult.innerHTML = lang==="en" ? "API key copied." : "API key copiada.";
+      }catch{
+        acResult.style.display = "block";
+        acResult.innerHTML = lang==="en" ? "Copy failed (browser blocked)." : "Falha ao copiar (bloqueado pelo navegador).";
+      }
+      setTimeout(()=> acResult.style.display="none", 1600);
+    });
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    const savedTheme = localStorage.getItem("ui_theme") || "blue";
+    const savedLang = localStorage.getItem("ui_lang") || "pt";
+
+    applyTheme(savedTheme);
+    applyLang(savedLang);
+
+    // initial route
+    setActivePage(getRouteFromHash());
+
+    // services render
+    render(services);
+    applyFilters();
+
+    // create order init
+    renderOrderCategories();
+    renderOrderGrid();
+    renderOrderServiceSelect();
+    updateOrderSummary(findOrderService(selectedServiceId));
+
+    // balances and stats init
+    setBalance(getBalance());
+    syncAffUI();
+    renderTickets();
+
+    const STATUS_LABELS = {
+      pt: {
+        pending: "Pendente",
+        processing: "Em processamento",
+        progress: "Em progresso",
+        complete: "Completo",
+        partial: "Parcial",
+        cancelled: "Cancelado"
+      },
+      en: {
+        pending: "Pending",
+        processing: "Processing",
+        progress: "In progress",
+        complete: "Complete",
+        partial: "Partial",
+        cancelled: "Cancelled"
+      }
+    };
+
+    // orders mock
+    const ORDER_HISTORY = [
+      {
+        id: 56054121,
+        service: "Instagram Followers • WORLD",
+        link: "https://instagram.com/cliente2",
+        date: "2025-01-15 09:20",
+        qty: 1500,
+        price: "R$ 28,40",
+        start: 2100,
+        final: 2100,
+        status: "pending"
+      },
+      {
+        id: 56054160,
+        service: "Instagram Followers • BR",
+        link: "https://instagram.com/cliente1",
+        date: "2025-01-14 00:36",
+        qty: 1200,
+        price: "R$ 32,90",
+        start: 3200,
+        final: 4350,
+        status: "processing"
+      },
+      {
+        id: 56084468,
+        service: "Telegram Members • PREMIUM",
+        link: "https://t.me/canalpremium",
+        date: "2025-01-09 02:55",
+        qty: 500,
+        price: "R$ 89,90",
+        start: 1200,
+        final: 1700,
+        status: "progress"
+      },
+      {
+        id: 47935858,
+        service: "TikTok Likes • WORLD",
+        link: "https://tiktok.com/@cliente",
+        date: "2024-11-19 12:11",
+        qty: 3000,
+        price: "R$ 18,50",
+        start: 980,
+        final: 3980,
+        status: "complete"
+      },
+      {
+        id: 47928055,
+        service: "YouTube Subscribers • WORLD",
+        link: "https://youtube.com/@cliente",
+        date: "2024-11-18 21:10",
+        qty: 800,
+        price: "R$ 65,00",
+        start: 2500,
+        final: 3200,
+        status: "partial"
+      },
+      {
+        id: 47583501,
+        service: "Discord Members • OFFLINE",
+        link: "https://discord.gg/cliente",
+        date: "2024-11-18 01:57",
+        qty: 1500,
+        price: "R$ 22,40",
+        start: 600,
+        final: 1600,
+        status: "cancelled"
+      }
+    ];
+
+    const orderRows = document.getElementById("orderRows");
+
+    function renderOrders(){
+      if (!orderRows) return;
+      const lang = getLang();
+      const labels = STATUS_LABELS[lang] || STATUS_LABELS.pt;
+      orderRows.innerHTML = ORDER_HISTORY.map(order => `
+        <tr>
+          <td><span class="idbadge">#${order.id}</span></td>
+          <td>${escapeHtml(order.service)}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="muted small">${escapeHtml(order.link)}</span>
+              <button class="btn small ghost" type="button" data-copy="${escapeHtml(order.link)}">Copiar</button>
+            </div>
+          </td>
+          <td class="nowrap">${escapeHtml(order.date)}</td>
+          <td class="nowrap">${order.qty}</td>
+          <td class="nowrap">${escapeHtml(order.price)}</td>
+          <td class="nowrap">${order.start}</td>
+          <td class="nowrap">${order.final}</td>
+          <td class="nowrap">
+            <span class="status-chip ${order.status}">
+              ${labels[order.status] || order.status}
+            </span>
+          </td>
+          <td class="right nowrap">
+            <div class="order-actions">
+              <button class="btn small success" type="button" data-reorder="${order.service}">Re Order</button>
+              <button class="btn small warn" type="button" data-support="${order.id}">Suporte</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+
+      orderRows.querySelectorAll("button[data-copy]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const link = btn.getAttribute("data-copy");
+          try{
+            await navigator.clipboard.writeText(link);
+          }catch{
+            // ignore in mock
+          }
+        });
+      });
+      orderRows.querySelectorAll("button[data-reorder]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          location.hash = "#create";
+          const serviceName = btn.getAttribute("data-reorder");
+          const svc = ORDER_CATEGORIES.flatMap(c=>c.items).find(item => serviceName.includes(item.name.split(" • ")[0]));
+          if (svc){
+            selectedServiceId = svc.id;
+            renderOrderServiceSelect(svc);
+            coSelected.textContent = svc.name;
+            updateOrderSummary(svc);
+          }
+        });
+      });
+      orderRows.querySelectorAll("button[data-support]").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          location.hash = "#tickets";
+          tkSubject.value = `Suporte pedido #${btn.getAttribute("data-support")}`;
+          tkMessage.value = "Preciso de ajuda com este pedido.";
+        });
+      });
+    }
+
+    renderOrders();
+
+    afMethod.addEventListener("change", ()=>{
+      const isPix = afMethod.value === "pix";
+      if (afCpfRow){
+        afCpfRow.style.display = isPix ? "block" : "none";
+      }
+    });
+    if (afCpfRow){
+      afCpfRow.style.display = afMethod.value === "pix" ? "block" : "none";
+    }
+  </script>
+</body>
+</html>
